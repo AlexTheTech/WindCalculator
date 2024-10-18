@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Analysis Calculator - Wind Energy Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        .financial-section {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 50px;
+            background-color: #e0f7fa;
+            border-radius: 15px;
+            width: 90%;
+            margin: 40px auto;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            gap: 20px;
+        }
+        .financial-container {
+            width: 45%;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin: 20px 0;
+            width: 100%;
+        }
+        .form-group label {
+            font-size: 1.2em;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .form-group input {
+            width: 80%;
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 10px;
+            border: 2px solid #00796b;
+            box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        button#financial-calculate-button {
+            font-size: 1.2em;
+            color: #fff;
+            background-color: #00796b;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            margin-top: 20px;
+        }
+        button#financial-calculate-button:hover {
+            transform: scale(1.1);
+            background-color: #00695c;
+        }
+        .financial-results-container {
+            background: #ffffff;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .chart-container {
+            width: 45%;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        #household-chart, #payback-chart {
+            width: 100%;
+            height: 400px;
+            border: 2px solid #00796b;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Financial Analysis Calculator</h1>
+            <p class="hero-subtitle">Estimate Costs, Profits, and Payback Time</p>
+        </div>
+    </header>
+
+    <section class="financial-section">
+        <div class="financial-container">
+            <h2>Financial Inputs</h2>
+            <form id="financial-calculator">
+                <div class="form-group">
+                    <label for="initial-cost">Initial Investment Cost (AUD):</label>
+                    <input type="number" id="initial-cost" value="500000" required>
+                </div>
+                <div class="form-group">
+                    <label for="maintenance-cost">Annual Maintenance Cost (AUD):</label>
+                    <input type="number" id="maintenance-cost" value="20000" required>
+                </div>
+                <div class="form-group">
+                    <label for="electricity-price">Price of Electricity (AUD per kWh):</label>
+                    <input type="number" id="electricity-price" step="0.01" value="0.12" required>
+                </div>
+                <div class="form-group">
+                    <label for="annual-energy">Annual Energy Production (kWh):</label>
+                    <input type="number" id="annual-energy" value="6132000" required>
+                </div>
+                <button type="button" id="financial-calculate-button">Calculate Financials</button>
+            </form>
+            <div class="financial-results-container" style="order: 1;">
+                <h3>Financial Results:</h3>
+                <p id="annual-revenue-result">Annual Revenue: </p>
+                <p id="payback-period-result">Payback Period: </p>
+                <p id="net-profit-result">Net Profit after Payback: </p>
+                <p id="households-powered-result">Number of Households Powered: </p>
+            </div>
+        </div>
+
+        <div class="chart-container" style="order: 2;">
+            <h2>Payback Period Over Time</h2>
+            <canvas id="payback-chart"></canvas>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; Alexander Piccinelli | Sima Vivaldi. </p>
+        <p>All rights reserved.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.getElementById('financial-calculate-button').addEventListener('click', function() {
+            const initialCost = parseFloat(document.getElementById('initial-cost').value);
+            const maintenanceCost = parseFloat(document.getElementById('maintenance-cost').value);
+            const electricityPrice = parseFloat(document.getElementById('electricity-price').value);
+            const annualEnergy = parseFloat(document.getElementById('annual-energy').value);
+            const avgHouseholdConsumption = 10000; // kWh per year per household (example value)
+
+            // Calculate Annual Revenue
+            const annualRevenue = electricityPrice * annualEnergy;
+            document.getElementById('annual-revenue-result').textContent = `Annual Revenue: AUD$${annualRevenue.toFixed(2)}`;
+
+            // Calculate Payback Period
+            const paybackPeriod = initialCost / (annualRevenue - maintenanceCost);
+            document.getElementById('payback-period-result').textContent = `Payback Period: ${paybackPeriod.toFixed(2)} years`;
+
+            // Calculate Net Profit After Payback
+            const netProfit = annualRevenue - maintenanceCost;
+            document.getElementById('net-profit-result').textContent = `Net Profit after Payback: AUD$${netProfit.toFixed(2)} per year`;
+
+            // Calculate Number of Households Powered
+            const householdsPowered = annualEnergy / avgHouseholdConsumption;
+            document.getElementById('households-powered-result').textContent = `Number of Households Powered: ${householdsPowered.toFixed(0)}`;
+
+            // Create Payback Period Chart
+            const ctxPayback = document.getElementById('payback-chart').getContext('2d');
+            if (window.paybackChart) {
+                window.paybackChart.destroy();
+            }
+            const years = Array.from({ length: Math.ceil(paybackPeriod) }, (_, i) => i + 1);
+            const cumulativeCashflow = years.map(year => (annualRevenue - maintenanceCost) * year - initialCost);
+
+            window.paybackChart = new Chart(ctxPayback, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [{
+                        label: 'Cumulative Cash Flow Over Time',
+                        data: cumulativeCashflow,
+                        borderColor: '#ff6f00',
+                        fill: false,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Cumulative Cash Flow (AUD)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Years'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

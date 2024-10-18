@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emissions Analysis Calculator - Wind Energy Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        .emissions-section {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 50px;
+            background-color: #f0f8ff;
+            border-radius: 15px;
+            width: 90%;
+            margin: 40px auto;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            gap: 20px;
+        }
+        .emissions-container {
+            width: 45%;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin: 20px 0;
+            width: 80%;
+        }
+        .form-group label {
+            font-size: 1.2em;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 10px;
+            border: 2px solid #00796b;
+            box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        button#emissions-calculate-button {
+            font-size: 1.2em;
+            color: #fff;
+            background-color: #00796b;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            margin-top: 20px;
+        }
+        button#emissions-calculate-button:hover {
+            transform: scale(1.1);
+            background-color: #00695c;
+        }
+        .emissions-results-container {
+            background: #ffffff;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Emissions Analysis Calculator</h1>
+            <p class="hero-subtitle">Estimate Emission Reductions from Wind Energy Production</p>
+        </div>
+    </header>
+
+    <section class="emissions-section">
+        <div class="emissions-container">
+            <h2>Emissions Inputs</h2>
+            <form id="emissions-calculator">
+                <div class="form-group">
+                    <label for="annual-energy-emissions">Annual Energy Production (kWh):</label>
+                    <input type="number" id="annual-energy-emissions" value="6132000" required>
+                </div>
+                <div class="form-group">
+                    <label for="emissions-factor">Emissions Factor (kg CO<sub>2</sub> per kWh):</label>
+                    <input type="number" id="emissions-factor" step="0.01" value="0.5" required>
+                </div>
+                <button type="button" id="emissions-calculate-button">Calculate Emissions</button>
+            </form>
+            <div class="emissions-results-container">
+                <h3>Emissions Reduction Results:</h3>
+                <p id="annual-emissions-reduction-result">Annual Emissions Reduction: </p>
+                <p id="equivalent-cars-removed-result">Equivalent Cars Removed from Road: </p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; Alexander Piccinelli | Sima Vivaldi. </p>
+        <p>All rights reserved.</p>
+    </footer>
+    <script>
+        document.getElementById('emissions-calculate-button').addEventListener('click', function() {
+            const annualEnergy = parseFloat(document.getElementById('annual-energy-emissions').value);
+            const emissionsFactor = parseFloat(document.getElementById('emissions-factor').value);
+            const emissionsPerCar = 4.6; // metric tons CO2 per year (example value)
+
+            // Calculate Annual Emissions Reduction
+            const annualEmissionsReduction = annualEnergy * emissionsFactor / 1000; // convert to metric tons
+            document.getElementById('annual-emissions-reduction-result').textContent = `Annual Emissions Reduction: ${annualEmissionsReduction.toFixed(2)} metric tons of CO₂`;
+
+            // Calculate Equivalent Cars Removed
+            const equivalentCarsRemoved = annualEmissionsReduction / emissionsPerCar;
+            document.getElementById('equivalent-cars-removed-result').textContent = `Equivalent Cars Removed from Road: ${equivalentCarsRemoved.toFixed(0)} cars`;
+        });
+    </script>
+</body>
+</html>
