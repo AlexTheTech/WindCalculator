@@ -3,123 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emissions Analysis Calculator - Wind Energy Explorer</title>
+    <title>CO₂ Emission Reduction - Wind Energy Explorer</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <style>
-        .emissions-section {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 50px;
-            background-color: #f0f8ff;
-            border-radius: 15px;
-            width: 90%;
-            margin: 40px auto;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            gap: 20px;
-        }
-        .emissions-container {
-            width: 45%;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .form-group {
-            margin: 20px 0;
-            width: 100%;
-        }
-        .form-group label {
-            font-size: 1.2em;
-            display: block;
-            margin-bottom: 10px;
-        }
-        .form-group input {
-            width: 85%;
-            padding: 10px;
-            font-size: 1em;
-            border-radius: 10px;
-            border: 2px solid #00796b;
-            box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        button#emissions-calculate-button {
-            font-size: 1.2em;
-            color: #fff;
-            background-color: #00796b;
-            padding: 15px 25px;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: transform 0.3s, background-color 0.3s;
-            margin-top: 20px;
-        }
-        button#emissions-calculate-button:hover {
-            transform: scale(1.1);
-            background-color: #00695c;
-        }
-        .emissions-results-container {
-            background: #ffffff;
-            padding: 20px;
-            margin-top: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: left;
-        }
-        .chart-container {
-            width: 45%;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
-        #emissions-chart {
-            width: 100%;
-            height: 400px;
-            border: 2px solid #00796b;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-    .info {
-            font-size: 0.8em;
-            color: #555;
-        }
-    </style>
 </head>
 <body>
+    <nav class="sticky-navbar">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="wind_analysis_page.html">Wind Analysis</a></li>
+            <li><a href="financial_analysis_page.html">Financial Calculator</a></li>
+            <li><a href="emissions_analysis.html">CO₂ Reduction</a></li>
+        </ul>
+    </nav>
+
     <header class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Emissions Analysis Calculator</h1>
-            <p class="hero-subtitle">Estimate Emission Reductions from Wind Energy Production</p>
+            <h1 class="hero-title">CO₂ Emission Reduction Analysis</h1>
+            <p class="hero-subtitle">Estimate the Environmental Benefits of Wind Energy</p>
         </div>
     </header>
 
-    <section class="emissions-section">
-        <div class="emissions-container">
-            <h2>Emissions Inputs</h2>
-            <form id="emissions-calculator">
-                <div class="form-group">
-                    <label for="annual-energy-emissions">Annual Energy Production (kWh):</label>
-                    <input type="number" id="annual-energy-emissions" value="6132000" required>
+    <section class="emission-analysis-section">
+        <div class="input-and-results-container">
+            <div class="emission-container">
+                <h2>CO₂ Emission Savings Calculator</h2>
+                <form id="emission-calculator">
+                    <div class="form-group">
+                        <label for="annual-energy">Annual Energy Production (kWh):</label>
+                        <input type="number" id="annual-energy" value="6132000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emission-factor">Emission Factor (kg CO₂ per kWh):</label>
+                        <input type="number" id="emission-factor" value="0.5" required>
+                    </div>
+                    <button type="button" id="calculate-emission-button">Calculate CO₂ Savings</button>
+                </form>
+                <div class="results-container">
+                    <h3>Results:</h3>
+                    <p id="co2-savings-result">CO₂ Emission Savings: </p>
                 </div>
-                <div class="form-group">
-                    <label for="emissions-factor">Emissions Factor (kg CO<sub>2</sub> per kWh): </label>
-                    <label for="emissions-factor"><span class="info">(This indicates the amount of CO<sub>2</sub> emitted for each kWh of energy produced by traditional fossil fuel sources.)</span></label>
-                    <input type="number" id="emissions-factor" step="0.01" value="0.5" required>
-                </div>
-                <button type="button" id="emissions-calculate-button">Calculate Emissions</button>
-            </form>
-            <div class="emissions-results-container">
-                <h3>Emissions Reduction Results:</h3>
-                <p id="annual-emissions-reduction-result">Annual Emissions Reduction: </p>
-                <p id="equivalent-cars-removed-result">Equivalent Cars Removed from Road: </p>
             </div>
         </div>
-        <div class="chart-container">
-            <h2>Annual Emissions Reduction</h2>
-            <canvas id="emissions-chart"></canvas>
+        <div class="graph-container">
+            <h3>Cumulative CO₂ Savings Over Time</h3>
+            <canvas id="co2-savings-chart"></canvas>
         </div>
     </section>
 
@@ -127,50 +55,8 @@
         <p>&copy; Alexander Piccinelli | Sima Vivaldi. </p>
         <p>All rights reserved.</p>
     </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.getElementById('emissions-calculate-button').addEventListener('click', function() {
-            const annualEnergy = parseFloat(document.getElementById('annual-energy-emissions').value);
-            const emissionsFactor = parseFloat(document.getElementById('emissions-factor').value);
-            const emissionsPerCar = 4.6; // metric tons CO2 per year (example value)
-
-            // Calculate Annual Emissions Reduction
-            const annualEmissionsReduction = annualEnergy * emissionsFactor / 1000; // convert to metric tons
-            document.getElementById('annual-emissions-reduction-result').textContent = `Annual Emissions Reduction: ${annualEmissionsReduction.toFixed(2)} metric tons of CO₂`;
-
-            // Calculate Equivalent Cars Removed
-            const equivalentCarsRemoved = annualEmissionsReduction / emissionsPerCar;
-            document.getElementById('equivalent-cars-removed-result').textContent = `Equivalent Cars Removed from Road: ${equivalentCarsRemoved.toFixed(0)} cars`;
-
-            // Create or Update Emissions Reduction Chart
-            const ctxEmissions = document.getElementById('emissions-chart').getContext('2d');
-            if (window.emissionsChart) {
-                window.emissionsChart.destroy();
-            }
-            window.emissionsChart = new Chart(ctxEmissions, {
-                type: 'bar',
-                data: {
-                    labels: ['Emissions Reduction'],
-                    datasets: [{
-                        label: 'Annual Emissions Reduction (Metric Tons of CO₂)',
-                        data: [annualEmissionsReduction],
-                        backgroundColor: '#00796b'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Metric Tons of CO₂'
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="emissions_analysis_script.js"></script>
 </body>
 </html>
